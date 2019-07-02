@@ -1,4 +1,4 @@
-include ':moxy'
+include ':moxy', ':sample-java'
 include ':moxy-core'
 include ':moxy-android'
 include ':moxy-compiler'

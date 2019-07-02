@@ -9,9 +9,12 @@ class PresenterInfo {
 
     private final ClassName viewStateName;
 
+    private final TypeElement element;
+
     PresenterInfo(TypeElement name, String viewStateName) {
         this.name = ClassName.get(name);
         this.viewStateName = ClassName.bestGuess(viewStateName);
+        this.element = name;
     }
 
     ClassName getName() {
@@ -20,5 +23,9 @@ class PresenterInfo {
 
     ClassName getViewStateName() {
         return viewStateName;
+    }
+
+    TypeElement getElement() {
+        return element;
     }
 }

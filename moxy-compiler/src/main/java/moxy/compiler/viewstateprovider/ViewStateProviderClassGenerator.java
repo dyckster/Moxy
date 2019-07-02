@@ -18,9 +18,10 @@ import moxy.viewstate.MvpViewState;
 public final class ViewStateProviderClassGenerator extends JavaFilesGenerator<PresenterInfo> {
 
     @Override
-    public List<JavaFile> generate(moxy.compiler.viewstateprovider.PresenterInfo presenterInfo) {
+    public List<JavaFile> generate(PresenterInfo presenterInfo) {
         TypeSpec typeSpec = TypeSpec
             .classBuilder(presenterInfo.getName().simpleName() + MvpProcessor.VIEW_STATE_PROVIDER_SUFFIX)
+                .addOriginatingElement(presenterInfo.getElement())
             .addModifiers(Modifier.PUBLIC)
             .superclass(ViewStateProvider.class)
             .addMethod(generateGetViewStateMethod(presenterInfo.getName(), presenterInfo.getViewStateName()))

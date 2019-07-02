@@ -190,6 +190,8 @@ public class MvpCompiler extends AbstractProcessor {
                         .getSimpleName(), element);
             }
 
+            messager.printMessage(Diagnostic.Kind.OTHER, "Found class "  + element.getSimpleName() + " with annotation " + clazz.getSimpleName());
+
             generateCode(element, kind, processor, classGenerator);
         }
     }

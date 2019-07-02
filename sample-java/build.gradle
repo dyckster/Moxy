@@ -1,0 +1,9 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(":moxy-core")
+    annotationProcessor project(":moxy-compiler")
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
