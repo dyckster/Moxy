@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(31)
 
     defaultConfig {
         minSdkVersion(14)
-        targetSdkVersion(29)
+        targetSdkVersion(31)
 
         consumerProguardFiles("/moxy/src/main/resources/META-INF/proguard/moxy.pro")
     }

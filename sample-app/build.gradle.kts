@@ -12,12 +12,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(32)
 
     defaultConfig {
         applicationId = "moxy.sample"
         minSdkVersion(23)
-        targetSdkVersion(29)
+        targetSdkVersion(32)
         versionCode = 1
         versionName = "1.0"
 
@@ -55,13 +55,6 @@ android {
         viewBinding = true
     }
 
-    // we've placed source code in "kotlin folder" but you don't have to do that.
-    sourceSets {
-        getByName("main") {
-            java.setSrcDirs(java.srcDirs + file("src/main/kotlin"))
-        }
-    }
-
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
 
@@ -87,18 +80,18 @@ kapt {
 
 dependencies {
     // Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
 
     // AndroidX
-    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.5.0")
 
     // AndroidX KTX
-    implementation("androidx.core:core-ktx:1.3.1")
-    implementation("androidx.fragment:fragment-ktx:1.2.5")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.5.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.5.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Material Design
@@ -112,8 +105,8 @@ dependencies {
     // Image loader
     implementation("io.coil-kt:coil:1.0.0-rc2")
 
-    implementation("com.google.dagger:hilt-android:2.35.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.35.1")
+    implementation("com.google.dagger:hilt-android:2.43.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.43.2")
 
     // java.time and other stuff without third-party libraries
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")

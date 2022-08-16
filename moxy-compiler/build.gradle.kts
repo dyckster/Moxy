@@ -12,7 +12,7 @@ java {
 
 dependencies {
     implementation(project(":moxy"))
-
+    implementation(files("src/xprocessing.jar"))
     implementation(Deps.kotlinStdlibForCompiler)
 
     implementation(Deps.javapoet)
@@ -31,7 +31,4 @@ dependencies {
     testImplementation(Deps.compiletesting)
     testImplementation(Deps.asm)
     testImplementation(Deps.asmUtil)
-
-    //workaround to use test resources (https://stackoverflow.com/q/24870464)
-    testRuntime(files(sourceSets.test.get().output.resourcesDir))
 }

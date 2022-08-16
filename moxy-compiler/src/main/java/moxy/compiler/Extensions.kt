@@ -21,7 +21,7 @@ import kotlin.reflect.KProperty1
 /**
  * TypeMirror must be of kind TypeKind.DECLARED
  */
-@UseExperimental(ExperimentalContracts::class)
+@OptIn(ExperimentalContracts::class)
 fun TypeMirror.asTypeElement(): TypeElement {
     contract {
         returns() implies (this@asTypeElement is DeclaredType)

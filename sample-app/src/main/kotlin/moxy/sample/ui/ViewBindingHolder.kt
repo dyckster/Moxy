@@ -5,6 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 
+
 /**
  * Lifecycle-aware holder for ViewBinding instance.
  * Releases a reference to ViewBinding after the View is destroyed
