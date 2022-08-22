@@ -1,6 +1,6 @@
 package moxy.compiler.presenterbinder
 
-import com.squareup.javapoet.ClassName
+import com.squareup.kotlinpoet.asClassName
 import moxy.compiler.ElementProcessor
 import moxy.compiler.asDeclaredType
 import moxy.compiler.asTypeElement
@@ -45,7 +45,7 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
 
         return TargetClassInfo(
             element = presentersContainer,
-            name = ClassName.get(presentersContainer),
+            name = presentersContainer.asClassName(),
             fields = fields,
             superPresenterBinder = findSuperPresenterContainer(presentersContainer)
         )

@@ -1,17 +1,13 @@
 package moxy.compiler.presenterbinder
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import moxy.MvpPresenter
 import moxy.MvpProcessor
 import moxy.PresenterBinder
 import moxy.compiler.JavaFilesGenerator
 import moxy.compiler.Util
 import moxy.compiler.asTypeElement
-import moxy.compiler.className
-import moxy.compiler.parametrizedWith
 import moxy.compiler.subtypeWildcard
 import moxy.compiler.supertypeWildcard
 import moxy.compiler.toJavaFile
@@ -27,24 +23,24 @@ import javax.lang.model.element.TypeElement
  */
 class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
 
-    override fun generate(targetClassInfo: TargetClassInfo): List<JavaFile> {
+    override fun generate(targetClassInfo: TargetClassInfo): List<FileSpec> {
         val targetClassName = targetClassInfo.name
         val fields = targetClassInfo.fields
         val superPresenterBinder = targetClassInfo.superPresenterBinder
 
-        val containerSimpleName = targetClassName.simpleNames().joinToString("$")
+        val containerSimpleName = targetClassName.simpleNames.joinToString("$")
 
         val classBuilder = TypeSpec
             .classBuilder(containerSimpleName + MvpProcessor.PRESENTER_BINDER_SUFFIX)
             .addOriginatingElement(targetClassInfo.element)
-            .addModifiers(Modifier.PUBLIC)
-            .superclass(PresenterBinder::class.className().parametrizedWith(targetClassName))
+            .addModifiers(KModifier.PUBLIC)
+            .superclass(PresenterBinder::class.asClassName().parameterizedBy(targetClassName))
 
         for (field in fields) {
             classBuilder.addType(generatePresenterBinderClass(field, targetClassName))
         }
 
-        classBuilder.addMethod(
+        classBuilder.addFunction(
             generateGetPresentersMethod(
                 fields,
                 targetClassName,
@@ -59,14 +55,14 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
         fields: List<TargetPresenterField>,
         containerClassName: ClassName,
         superPresenterBinder: TypeElement?
-    ): MethodSpec {
+    ): FunSpec {
 
-        val builder = MethodSpec.methodBuilder("getPresenterFields")
+        val builder = FunSpec.builder("getPresenterFields")
             .addAnnotation(Override::class.java)
-            .addModifiers(Modifier.PUBLIC)
+            .addModifiers(KModifier.PUBLIC)
             .returns(
-                List::class.className().parametrizedWith(
-                    PresenterField::class.className().parametrizedWith(
+                List::class.asClassName().parameterizedBy(
+                    PresenterField::class.asClassName().parameterizedBy(
                         containerClassName.supertypeWildcard()
                     )
                 )
@@ -105,11 +101,11 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
         val tag = field.tag ?: field.name
 
         return TypeSpec.classBuilder(field.generatedClassName)
-            .addModifiers(Modifier.PUBLIC)
-            .superclass(PresenterField::class.className().parametrizedWith(targetClassName))
-            .addMethod(generatePresenterBinderConstructor(field, tag))
-            .addMethod(generateBindMethod(field, targetClassName))
-            .addMethod(generateProvidePresenterMethod(field, targetClassName))
+            .addModifiers(KModifier.PUBLIC)
+            .superclass(PresenterField::class.asClassName().parameterizedBy(targetClassName))
+            .addFunction(generatePresenterBinderConstructor(field, tag))
+            .addFunction(generateBindMethod(field, targetClassName))
+            .addFunction(generateProvidePresenterMethod(field, targetClassName))
             .addOptionalMethod(generateGetTagMethod(field.presenterTagProviderMethodName, targetClassName))
             .build()
     }
@@ -117,13 +113,13 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
     private fun generateGetTagMethod(
         tagProviderMethodName: String?,
         targetClassName: ClassName
-    ): MethodSpec? {
+    ): FunSpec? {
         tagProviderMethodName ?: return null
-        return MethodSpec.methodBuilder("getTag")
+        return FunSpec.builder("getTag")
             .addAnnotation(Override::class.java)
-            .addModifiers(Modifier.PUBLIC)
+            .addModifiers(KModifier.PUBLIC)
             .returns(String::class.java)
-            .addParameter(targetClassName, "delegated")
+            .addParameter("delegated",targetClassName)
             .addStatement("return String.valueOf(delegated.$1L())", tagProviderMethodName)
             .build()
     }
@@ -131,22 +127,22 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
     private fun generatePresenterBinderConstructor(
         field: TargetPresenterField,
         tag: String
-    ): MethodSpec {
-        return MethodSpec.constructorBuilder()
-            .addModifiers(Modifier.PUBLIC)
-            .addStatement("super($1S, $2S, $3T.class)", tag, field.presenterId, field.typeName)
+    ): FunSpec {
+        return FunSpec.constructorBuilder()
+            .addModifiers(KModifier.PUBLIC)
+            .addStatement("super($1S, $2S, $3T.class)", tag, field.presenterId.toString(), field.typeName)
             .build()
     }
 
     private fun generateBindMethod(
         field: TargetPresenterField,
         targetClassName: ClassName
-    ): MethodSpec {
-        return MethodSpec.methodBuilder("bind")
+    ): FunSpec {
+        return FunSpec.builder("bind")
             .addAnnotation(Override::class.java)
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(targetClassName, "target")
-            .addParameter(MvpPresenter::class.java, "presenter")
+            .addModifiers(KModifier.PUBLIC)
+            .addParameter("target",targetClassName)
+            .addParameter("presenter", MvpPresenter::class.java)
             .addStatement("target.$1L = ($2T) presenter", field.name, field.typeName)
             .build()
     }
@@ -154,16 +150,16 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
     private fun generateProvidePresenterMethod(
         field: TargetPresenterField,
         targetClassName: ClassName
-    ): MethodSpec {
-        val builder: MethodSpec.Builder =
-            MethodSpec.methodBuilder("providePresenter")
+    ): FunSpec {
+        val builder: FunSpec.Builder =
+            FunSpec.builder("providePresenter")
                 .addAnnotation(Override::class.java)
-                .addModifiers(Modifier.PUBLIC)
-                .returns(MvpPresenter::class.className().parametrizedWith(Any::class.subtypeWildcard()))
-                .addParameter(targetClassName, "delegated")
+                .addModifiers(KModifier.PUBLIC)
+                .returns(MvpPresenter::class.asClassName().parameterizedBy(Any::class.subtypeWildcard()))
+                .addParameter("delegated", targetClassName)
 
         if (field.presenterProviderMethodName != null) {
-            builder.addStatement("return delegated.$1L()", field.presenterProviderMethodName)
+            builder.addStatement("return delegated.$1L()", field.presenterProviderMethodName!!)
         } else {
             val hasEmptyConstructor = Util.hasEmptyConstructor(field.type.asTypeElement())
 
@@ -183,9 +179,9 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
         return builder.build()
     }
 
-    private fun TypeSpec.Builder.addOptionalMethod(methodSpec: MethodSpec?): TypeSpec.Builder {
+    private fun TypeSpec.Builder.addOptionalMethod(methodSpec: FunSpec?): TypeSpec.Builder {
         return if (methodSpec != null) {
-            addMethod(methodSpec)
+            addFunction(methodSpec)
         } else {
             this
         }

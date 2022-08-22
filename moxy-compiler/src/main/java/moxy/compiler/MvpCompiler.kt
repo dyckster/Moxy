@@ -2,6 +2,7 @@ package moxy.compiler
 
 import com.google.auto.service.AutoService
 import com.squareup.javapoet.JavaFile
+import com.squareup.kotlinpoet.FileSpec
 import moxy.InjectViewState
 import moxy.compiler.presenterbinder.InjectPresenterProcessor
 import moxy.compiler.presenterbinder.PresenterBinderClassGenerator
@@ -224,7 +225,7 @@ class MvpCompiler : AbstractProcessor() {
         }
     }
 
-    private fun createSourceFile(file: JavaFile) {
+    private fun createSourceFile(file: FileSpec) {
         try {
             file.writeTo(processingEnv.filer)
         } catch (e: IOException) {

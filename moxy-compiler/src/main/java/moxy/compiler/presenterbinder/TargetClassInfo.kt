@@ -1,6 +1,6 @@
 package moxy.compiler.presenterbinder
 
-import com.squareup.javapoet.ClassName
+import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 

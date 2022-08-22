@@ -1,7 +1,6 @@
 package moxy.compiler;
 
-import com.squareup.javapoet.JavaFile;
-
+import com.squareup.kotlinpoet.FileSpec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -9,6 +8,6 @@ import java.util.List;
 public interface JavaFilesGenerator<T> {
 
     @NotNull
-    List<JavaFile> generate(T input);
+    List<FileSpec> generate(T input);
 }
 

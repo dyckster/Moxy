@@ -1,28 +1,13 @@
 package moxy.compiler.viewstate
 
-import com.squareup.javapoet.JavaFile
-import moxy.compiler.ElementProcessor
-import moxy.compiler.MvpCompiler
+import com.squareup.kotlinpoet.FileSpec
+import moxy.compiler.*
 import moxy.compiler.MvpCompiler.Companion.elementUtils
 import moxy.compiler.MvpCompiler.Companion.messager
-import moxy.compiler.asDeclaredType
-import moxy.compiler.asTypeElement
-import moxy.compiler.getAnnotationMirror
-import moxy.compiler.getValueAsString
-import moxy.compiler.getValueAsTypeMirror
-import moxy.compiler.viewstate.entity.MigrationMethod
-import moxy.compiler.viewstate.entity.StrategyWithTag
-import moxy.compiler.viewstate.entity.ViewInterfaceInfo
-import moxy.compiler.viewstate.entity.ViewInterfaceMethod
-import moxy.compiler.viewstate.entity.ViewStateMethod
+import moxy.compiler.viewstate.entity.*
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.Element
-import javax.lang.model.element.ElementKind
-import javax.lang.model.element.ExecutableElement
-import javax.lang.model.element.Modifier
-import javax.lang.model.element.TypeElement
+import javax.lang.model.element.*
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic.Kind
@@ -53,7 +38,7 @@ class ViewInterfaceProcessor(
         }
     }
 
-    fun makeMigrationHelper(): JavaFile? {
+    fun makeMigrationHelper(): FileSpec? {
         return if (enableEmptyStrategyHelper && migrationMethods.isNotEmpty()) {
             EmptyStrategyHelperGenerator.generate(migrationMethods)
         } else {

@@ -1,8 +1,6 @@
 package moxy.compiler.viewstate.entity
 
-import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeVariableName
+import com.squareup.kotlinpoet.*
 import moxy.compiler.equalsByType
 import moxy.compiler.viewstate.ViewMethodParameters
 import javax.lang.model.element.ExecutableElement
@@ -22,8 +20,8 @@ class ViewStateMethod constructor(
      */
     val argumentsString: String = element.parameters.joinToString { it.simpleName }
     val name: String = element.simpleName.toString()
-    val exceptions: List<TypeName> = element.thrownTypes.map { TypeName.get(it) }
-    val typeVariables: List<TypeVariableName> = element.typeParameters.map { TypeVariableName.get(it) }
+    val exceptions: List<TypeName> = element.thrownTypes.map { it.asTypeName() }
+    val typeVariables: List<TypeVariableName> = element.typeParameters.map { it.asTypeVariableName() }
     val parameters: List<ParameterSpec> = ViewMethodParameters.createParameters(targetInterfaceElement, element)
     val commandClassName: String get() = name.capitalize() + uniqueSuffix + "Command"
 

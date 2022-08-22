@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":moxy"))
     implementation(files("src/xprocessing.jar"))
     implementation(Deps.kotlinStdlibForCompiler)
-
+    implementation("com.squareup:kotlinpoet:1.12.0")
     implementation(Deps.javapoet)
 
     implementation(Deps.gradleIncapHelperAnnotations)

@@ -1,9 +1,7 @@
 package moxy.compiler.viewstate.entity
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeVariableName
-import moxy.compiler.parametrizedWith
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import javax.lang.model.element.TypeElement
 
 /**
@@ -14,15 +12,15 @@ class ViewInterfaceInfo constructor(
     val element: TypeElement,
     val methods: List<ViewStateMethod>
 ) {
-    val name: ClassName = ClassName.get(element)
-    val typeVariables: List<TypeVariableName> = element.typeParameters.map { TypeVariableName.get(it) }
+    val name: ClassName = element.asClassName()
+    val typeVariables: List<TypeVariableName> = element.typeParameters.map { it.asTypeVariableName() }
 
     val nameWithTypeVariables: TypeName
         get() {
             return if (typeVariables.isEmpty()) {
                 name
             } else {
-                name.parametrizedWith(typeVariables)
+                name.parameterizedBy(typeVariables)
             }
         }
 }

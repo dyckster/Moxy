@@ -1,7 +1,8 @@
 package moxy.compiler.presenterbinder
 
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.asTypeName
 import moxy.MvpProcessor
 import javax.lang.model.type.TypeMirror
 
@@ -18,11 +19,11 @@ class TargetPresenterField constructor(
     val tag: String?,
     val presenterId: String?
 ) {
-    private val isParametrized = TypeName.get(type) is ParameterizedTypeName
+    private val isParametrized = type.asTypeName() is ParameterizedTypeName
     val typeName: TypeName = if (isParametrized) {
-        (TypeName.get(type) as ParameterizedTypeName).rawType
+        (type.asTypeName() as ParameterizedTypeName).rawType
     } else {
-        TypeName.get(type)
+        type.asTypeName()
     }
 
     val generatedClassName: String get() = name.capitalize() + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX

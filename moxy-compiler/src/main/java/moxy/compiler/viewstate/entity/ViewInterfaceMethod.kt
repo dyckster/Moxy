@@ -1,6 +1,6 @@
 package moxy.compiler.viewstate.entity
 
-import com.squareup.javapoet.ParameterSpec
+import com.squareup.kotlinpoet.ParameterSpec
 import moxy.compiler.equalsByType
 import moxy.compiler.viewstate.ViewMethodParameters
 import javax.lang.model.element.ExecutableElement

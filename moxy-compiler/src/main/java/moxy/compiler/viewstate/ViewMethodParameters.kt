@@ -1,7 +1,8 @@
 package moxy.compiler.viewstate
 
-import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.TypeName
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.asTypeName
 import moxy.compiler.MvpCompiler
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.type.DeclaredType
@@ -16,10 +17,10 @@ object ViewMethodParameters {
         val resolvedParameterTypes: List<TypeMirror> = executableType.parameterTypes
 
         return methodElement.parameters.zip(resolvedParameterTypes) { parameterElement, parameterType ->
-            val type = TypeName.get(parameterType)
+            val type = parameterType.asTypeName()
             val name = parameterElement.simpleName.toString()
-            ParameterSpec.builder(type, name)
-                .addModifiers(parameterElement.modifiers)
+            ParameterSpec.builder(name,type)
+                .addModifiers(KModifier.REIFIED)
                 .build()
         }
     }
