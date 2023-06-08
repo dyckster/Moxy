@@ -7,7 +7,7 @@ object Versions {
 object Deps {
 
     const val android = "com.google.android:android:1.6_r2"
-    const val javapoet = "com.squareup:javapoet:1.11.1"
+    const val javapoet = "com.squareup:javapoet:1.13.0"
     const val junit = "junit:junit:4.12"
     const val mockito = "org.mockito:mockito-core:2.27.0"
     const val truth = "androidx.test.ext:truth:1.1.0"

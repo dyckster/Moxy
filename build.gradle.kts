@@ -19,6 +19,10 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.15.1" apply false
 }
 
+tasks.withType(Sign::class.java).all {
+    required(false)
+}
+
 subprojects {
     repositories {
         google()
@@ -69,6 +73,7 @@ fun isNonStable(version: String): Boolean {
     return isStable.not()
 }
 
-tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates").configure {
-    rejectVersionIf { isNonStable(candidate.version) }
-}
+tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates")
+    .configure {
+        rejectVersionIf { isNonStable(candidate.version) }
+    }
